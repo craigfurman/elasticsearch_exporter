@@ -28,7 +28,7 @@ func main() {
 			Default("/metrics").Envar("WEB_TELEMETRY_PATH").String()
 		esURI = kingpin.Flag("es.uri",
 			"HTTP API address of an Elasticsearch node.").
-			Default("http://localhost:9200").Envar("ES_URI").String()
+			Default("http://localhost:9200").Envar("ES_URI").Strings()
 		esTimeout = kingpin.Flag("es.timeout",
 			"Timeout for trying to get stats from Elasticsearch.").
 			Default("5s").Envar("ES_TIMEOUT").Duration()
@@ -85,7 +85,7 @@ func main() {
 
 	logger := getLogger(*logLevel, *logOutput, *logFormat)
 
-	esURL, err := url.Parse(*esURI)
+	esURL, err := url.Parse((*esURI)[0])
 	if err != nil {
 		_ = level.Error(logger).Log(
 			"msg", "failed to parse es.uri",
